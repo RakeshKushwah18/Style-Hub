@@ -57,13 +57,13 @@ export default function Favorites() {
               <p className="mt-1 font-display font-bold text-foreground">${product.price}</p>
             </div>
 
-            <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+            <div className="flex flex-col  items-end gap-2 sm:flex-row sm:items-center">
               <button
                 type="button"
                 onClick={() => moveLikeToCart(product.id)}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-ink px-3 py-2 text-sm font-semibold text-ink-foreground transition-colors hover:bg-ink/90"
+                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-ink px-3 py-2 text-sm font-semibold text-ink-foreground transition-colors hover:bg-ink/90"
               >
-                <ShoppingBag className="h-4 w-4" /> Move to Cart
+                <ShoppingBag className="h-4  w-4" /> Move to Cart
               </button>
               <button
                 type="button"
@@ -71,7 +71,7 @@ export default function Favorites() {
                 aria-label="Remove from favorites"
                 className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 cursor-pointer w-4" />
               </button>
             </div>
           </li>

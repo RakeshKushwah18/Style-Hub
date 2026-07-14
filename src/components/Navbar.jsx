@@ -55,6 +55,13 @@ const Navbar = () => {
 
                     {/* Action buttons: favorites + cart (both routed) */}
                     <div className="flex items-center gap-1">
+                       
+                       
+{/*                         
+                        <IconButton to="/favorites" label="Favorites" count={likeCount}>
+                            <Heart className="h-5 w-5" />
+                        </IconButton> */}
+                        
                         <IconButton to="/favorites" label="Favorites" count={likeCount}>
                             <Heart className="h-5 w-5" />
                         </IconButton>

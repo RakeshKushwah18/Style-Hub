@@ -4,6 +4,8 @@ import { ShoppingBag, Minus, Plus, Trash2, CheckCircle2 } from "lucide-react"
 import { useShop } from "../context/ShopContext.jsx"
 import { getProductById } from "../data/products"
 import { EmptyState } from "./Favorites.jsx"
+import emailjs from "@emailjs/browser"
+
 
 /*
   The CART bucket + checkout.
@@ -15,7 +17,7 @@ import { EmptyState } from "./Favorites.jsx"
 export default function Cart() {
   const { cart, setQty, removeFromCart, cartTotal, placeOrder } = useShop()
   const [checkingOut, setCheckingOut] = useState(false)
-  const [form, setForm] = useState({ name: "", address: "" })
+  const [form, setForm] = useState({ name: "", email: "", address: "" })
   const [placedOrder, setPlacedOrder] = useState(null)
 
   // Build full line items (product details + quantity) from the cart ids.
@@ -65,10 +67,45 @@ export default function Cart() {
     )
   }
 
-  const handlePlaceOrder = (e) => {
+  const handlePlaceOrder = async (e) => {
     e.preventDefault()
+
+    if (
+      !form.name ||
+      !form.email ||
+      !form.address
+    ) {
+      alert("Please fill all fields")
+      return
+    }
     const order = placeOrder(form)
-    if (order) setPlacedOrder(order)
+
+    if (!order) return
+
+    try {
+      await emailjs.send(
+        "service_1r6pzjw",
+        "template_wxnaz4t",
+        {
+          order_id: order.id,
+          name: form.name,
+          email: form.email,
+          address: form.address,
+          subtotal: cartTotal,
+          shipping: shipping,
+          total: grandTotal,
+        },
+        "Oty8OUoLe-yUFK3ZP"
+      )
+
+      setPlacedOrder(order)
+
+    } catch (error) {
+      console.log("EMAIL ERROR:", error)
+      alert(JSON.stringify(error))
+      alert(error.text, error.status)
+      alert(JSON.stringify(error))
+    }
   }
 
   const shipping = cartTotal > 100 ? 0 : 6
@@ -175,6 +212,8 @@ export default function Cart() {
             </button>
           ) : (
             <form onSubmit={handlePlaceOrder} className="mt-5 flex flex-col gap-3">
+
+
               <input
                 required
                 type="text"
@@ -182,6 +221,18 @@ export default function Cart() {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className="rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
+                value={form.email}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    email: e.target.value
+                  })
+                }
               />
               <textarea
                 required
